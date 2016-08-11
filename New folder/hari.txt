@@ -1,0 +1,75 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Data.SqlClient;
+using System.Data;
+
+namespace ClsConfig
+{
+    class Clsconn
+    {
+        DataTable dt;
+        public DataTable GetUsers()
+        {
+            string str = DB.ConnectionString;
+            using(SqlConnection conn= new SqlConnection(str))
+            {
+                conn.Open();
+
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = "insert into Users values";
+                cmd.CommandType = System.Data.CommandType.Text;
+                try
+                {
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    
+                    dt = new DataTable();
+                    
+                    dt.Columns.Add("UserId",typeof(string));
+                    dt.Columns.Add("FN", typeof(string));
+                    dt.Columns.Add("LN", typeof(string));
+                    dt.Columns.Add("PSWD",typeof(string));
+                    dt.Columns.Add("CPSWD",typeof(string));
+                    dt.Columns.Add("EMAIL",typeof(string));
+                    dt.Columns.Add("DOB", typeof(DateTime));
+                    dt.Columns.Add("PHNO", typeof(string));
+                    if(dr.HasRows)
+                    {
+                        while(dr.Read())
+                        {
+                            DataRow dw = dt.NewRow();
+                            dw["Userid"] = dr["UserId"].ToString();
+                            
+                            dw["FN"] = dr["FN"].ToString();
+
+                            dw["LN"] = dr["LN"].ToString();
+
+                            dw["PSWD"] = dr["PSWD"].ToString();
+
+                            dw["CPWSD"] = dr["CPSWD"].ToString();
+
+                            dw["EMAIL"] = dr["EMAIL"].ToString();
+
+                            dw["DOB"] = dr["DOB"].ToString();
+                            dw["DOB"] = dr["DOB"].ToString();
+
+                            dt.Rows.Add(dw);
+                        }
+                     
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                cmd.Dispose();
+                conn.Close();
+                return dt;
+            }
+
+        }
+    }
+}
